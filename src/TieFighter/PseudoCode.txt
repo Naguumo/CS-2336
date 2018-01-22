@@ -1,0 +1,42 @@
+Ishaan Bharal (ixb170930)
+
+Package TieFighter
+
+Class Main
+{
+    Method Main - Void - String[] args
+    {
+        //Declare Arrays
+        String array pilots - [20]
+        Double array coords - [20][16][2]
+
+        //Declare Reader/Writer
+        Scanner in
+        Writer out
+        
+        //Iterate Through Arrays
+        for(i; i < pilots.length; i++)
+        {
+            //Check If More Text
+            if in.hasNextLine
+            {
+                pilots[i] = in.next
+                coords[i] = 
+                out.write(calculate(coords[i]))
+            }
+        }
+        
+        //Close Reader/Writer
+        in.close
+        out.close
+    }
+
+    Method output - Void - 
+    {
+    }
+
+    Method calculate - Double - 
+    {
+        return 1/2 | Summation(0, n-2, (x_i+1 + x_i)(y_i+1 - y_i)) |
+    }
+}
