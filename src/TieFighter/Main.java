@@ -55,9 +55,7 @@ public class Main
         //Iterate for calculations
         double[] summations = new double[names.length];
         for(int i = 0; i < names.length; i++)
-        {
             summations[i] = calculate(coords[i]);
-        }
         
         //Output to text file
         output(names, summations);
@@ -68,9 +66,7 @@ public class Main
     {
         double num = 0;
         for(int i = 0; i < coords.length-1; i++)
-        {
             num += (coords[i+1][0]+coords[i][0])*(coords[i+1][1]-coords[i][1]);
-        }
         return .5 * Math.abs(num);
     }
     
@@ -85,7 +81,7 @@ public class Main
             //Iterate through lines
             for(int i = 0; i < names.length; i++)
                 if(names[i] != null) //Don't Write Blanks
-                    out.write(names[i] + "\t" + areas[i] + "\n");
+                    out.write(names[i] + " \t" + areas[i] + " \n");
             
             //Close Writer
             out.close();
