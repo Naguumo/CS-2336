@@ -26,8 +26,4 @@ public class Number
     {
         return nReal == a;
     }
-    public double compareTo(Number b)
-    {
-        return (this.nReal == b.getNumber()) ? this.nReal - b.getNumber() : 0;
-    }
 }

@@ -8,8 +8,9 @@ import java.util.Scanner;
 
 public class Main
 {
-    private static final String REG_NUMBER = "\\-?\\d+\\.?\\d*+"; //Matches any double as a string
-    private static final String REG_COMPLEX = REG_NUMBER + "\\s[\\+\\-]\\s" + REG_NUMBER + "i"; //Matches any complex number
+    private static final String REG_REAL = "\\-?\\d+\\.?\\d*+"; //Matches any double as a string
+    private static final String REG_IMAGINARY = REG_REAL + "i"; //Matches any double with an i at the end
+    private static final String REG_COMPLEX = REG_REAL + "\\s[\\+\\-]\\s" + REG_REAL + "i"; //Matches any complex number
     public static void main(String[] args) throws FileNotFoundException
     {
         Scanner in = new Scanner(new File("expressions.txt")); //Setup Reader
@@ -20,7 +21,8 @@ public class Main
         while(in.hasNextLine())
         {
             String line = in.nextLine(); //Read in Line
-//            if(line.matches(REG_NUMBER + "\\s[\\+\\-]\\s" + REG_NUMBER + "i")) //Case of Complex Numbers
+            
+//            if(line.matches(REG_REAL + "\\s[\\+\\-]\\s" + REG_REAL + "i")) //Case of Complex Numbers
 //            {
 //                System.out.println("Complex");
 //                double real = Double.parseDouble(line.substring(0,line.indexOf(" ")));
@@ -30,7 +32,7 @@ public class Main
 //                System.out.print(num.toString() + "\t\t");
 //                System.out.print(num.toString());
 //            }
-//            else if(line.matches(REG_NUMBER + "\\s(\\<|\\>|\\=|(\\/\\=))\\s" + REG_NUMBER)) //Case of Comparison
+//            else if(line.matches(REG_REAL + "\\s(\\<|\\>|\\=|(\\/\\=))\\s" + REG_REAL)) //Case of Comparison
 //            {
 //                System.out.println("Comparison");
 //                Number a = new Number(Double.parseDouble(line.substring(0,line.indexOf(" "))));
@@ -55,7 +57,7 @@ public class Main
 //                }
 //                System.out.print(a.toString() + " " + operator + " " + b.toString() + "\t\t" + result);
 //            }
-//            else if(line.matches(REG_NUMBER + "i"))
+//            else if(line.matches(REG_REAL + "i"))
 //            {
 //                System.out.println("Imaginary");
 //                ComplexNumber num = new ComplexNumber(0, Double.parseDouble(line.substring(0,line.length()-1)));
@@ -63,7 +65,7 @@ public class Main
 //                System.out.print(num.toString() + "\t\t");
 //                System.out.print(num.toString());
 //            }
-//            else if(line.matches(REG_NUMBER))
+//            else if(line.matches(REG_REAL))
 //            {
 //                System.out.println("Real");
 //                Number num = new Number(Double.parseDouble(line));

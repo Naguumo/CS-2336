@@ -13,15 +13,25 @@ public class Main
         {
             line = in.nextLine - Take in and store line input
             - skip line if its blank or has invalid input
-            - determine if real,imaginary, comparison, or complex
-            if(only 1 number)
-                real
-            else if(number and 'i')
-                imaginary
-            else if(number and (+ or -) and number with i)
-                complex
-            else if(number and (* or / or < or > or = or /=) and number)
-                comparison
+            - determine if reals or complex
+            if(2 reals)
+            {
+                Number a = new Number(-value-)
+                Number b = new Number(-value-)
+                out.write()
+            }
+            else if(1 real and 1 complex)
+            {
+                Number a = new Number(-value-)
+                ComplexNumber b = new ComplexNumber(-value)
+                out.write()
+            }
+            else if(2 complex)
+            {
+                ComplexNumber a = new ComplexNumber(-value)
+                ComplexNumber b = new ComplexNumber(-value)
+                out.write()
+            }
         }
 
         - flush reader/writer out of memory

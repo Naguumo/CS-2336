@@ -11,11 +11,20 @@ public class ComplexNumber extends Number
         nImaginary = imaginary;
     }
     
-    public double getImaginaryNumber(){return nImaginary;}
-    public void setImaginaryNumber(double n){nImaginary = n;}
+    public double getImaginaryNumber()
+    {
+        return nImaginary;
+    }
+    public void setImaginaryNumber(double n)
+    {
+        nImaginary = n;
+    }
     public String toString()
     {
         return (this.getNumber() != 0 ? String.format("%.2f + ", this.getNumber()) : "") + String.format("%.2fi", nImaginary);
     }
-    public boolean equals(ComplexNumber a){return nImaginary == a.getImaginaryNumber() && this.getNumber() == a.getNumber();}
+    public boolean equals(ComplexNumber a)
+    {
+        return nImaginary == a.getImaginaryNumber() && this.getNumber() == a.getNumber();
+    }
 }
