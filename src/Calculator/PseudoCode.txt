@@ -1,0 +1,53 @@
+Ishaan Bharal (ixb170930)
+
+package Calculator
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner in - expressions.txt - reader
+        PrintWriter out - results.txt - writer
+
+        while(in.hasNextLine) - Iterate through input file
+        {
+            line = in.nextLine - Take in and store line input
+            - skip line if its blank or has invalid input
+            - determine if real,imaginary, comparison, or complex
+            if(only 1 number)
+                real
+            else if(number and 'i')
+                imaginary
+            else if(number and (+ or -) and number with i)
+                complex
+            else if(number and (* or / or < or > or = or /=) and number)
+                comparison
+        }
+
+        - flush reader/writer out of memory
+        in.close();
+        out.close();
+    }
+}
+
+public class Number
+{
+    double nReal;
+    Number(double num) - Constructor
+
+    getter() - 1 line methods
+    setter()
+    toString()
+    equals()
+}
+
+public class ComplexNumber extends Number
+{
+    double nImaginary;
+    ComplexNumber(double real, double unreal) - Constructor
+
+    getter() - 1 line methods
+    setter()
+    toString()
+    equals()
+}
