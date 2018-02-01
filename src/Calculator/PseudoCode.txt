@@ -13,12 +13,48 @@ public class Main
         {
             line = in.nextLine - Take in and store line input
             - skip line if its blank or has invalid input
-            - determine if reals or complex
+            parts = line.split() - Split into 3 parts
+            
+            -turn values into objects
+            Object obj1 = getObject(part for obj1)
+            Object obj2 = getObject(part for obj2)
+            Object answer = evaluate(obj1, obj2, part for operator)
+
+            out.write(obj1 operation obj2 --> answer)
         }
 
         - flush reader/writer out of memory
         in.close();
         out.close();
+    }
+    
+    //Find Type of Number
+    public Object getObject(String obj)
+    {
+        switch(obj)
+        {
+            case Complex: -return ComplexNumber
+            case Imaginary: return ComplexNumber with 0 for Real
+            case Real: return Number
+            default: null
+        }
+    }
+
+    //Answer the Expression
+    public Object evaluate(Object obj1, Object obj2, String operator)
+    {
+        switch(operator)
+        {
+            case +,-: return ComplexNumber/Number with obj1 +- obj2
+            case *: return ComplexNumber/Number after using FOIL
+            case /: -find conjugate
+                -find numerator/denominator
+                return ComplexNumber/Number after evaluating
+            case <,>:
+                return |obj1| >< |obj2|
+            case =,/=:
+                return (!)obj1.equals(obj2)
+        }
     }
 }
 

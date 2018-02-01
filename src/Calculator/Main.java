@@ -71,6 +71,7 @@ public class Main
     //Returns Corresponding Object for Input Type
     public static Object getObject(String str)
     {
+        //Everything is ComplexNumber till end
         double real = 0, imaginary = 0;
         if(str.matches(REG_COMPLEX))
         {
