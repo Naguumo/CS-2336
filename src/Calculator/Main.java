@@ -5,83 +5,136 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main
 {
-    private static final String REG_REAL = "\\-?\\d+\\.?\\d*+"; //Matches any double as a string
-    private static final String REG_IMAGINARY = REG_REAL + "i"; //Matches any double with an i at the end
-    private static final String REG_COMPLEX = REG_REAL + "\\s[\\+\\-]\\s" + REG_REAL + "i"; //Matches any complex number
+    private static final String REG_REAL = "\\-?\\d+\\.?\\d*"; //REGEX for Real Number
+    private static final String REG_IMAGINARY = REG_REAL + "i"; //REGEX for Imaginary Number
+    private static final String REG_COMPLEX = REG_REAL + " [+\\-] " + REG_REAL + "i"; //REGEX for Complex Number
+    
+    private static final String REG_PLUSMINUS = "[+\\-\\*\\/]"; //REGEX for +,-,*,/
+    private static final String REG_COMPARE = "<|>|=|(\\/=)"; //REGEX for <,>,=,/=
+    
     public static void main(String[] args) throws FileNotFoundException
     {
         Scanner in = new Scanner(new File("expressions.txt")); //Setup Reader
         PrintWriter out = new PrintWriter(new File("results.txt")); //Setup Writer
         
-        System.out.println("Original:\t\tValue:");
-        
-        while(in.hasNextLine())
+        while(in.hasNextLine()) //Iterate through each line of File
         {
             String line = in.nextLine(); //Read in Line
+            if(line.equals("")) //Skip Iteration if Blank Line
+                continue;
             
-//            if(line.matches(REG_REAL + "\\s[\\+\\-]\\s" + REG_REAL + "i")) //Case of Complex Numbers
-//            {
-//                System.out.println("Complex");
-//                double real = Double.parseDouble(line.substring(0,line.indexOf(" ")));
-//                double imaginary = Double.parseDouble(line.substring(line.lastIndexOf(" "), line.indexOf("i")));
-//                ComplexNumber num = new ComplexNumber(real, (line.contains("-")?-1:1)*imaginary);
-//                
-//                System.out.print(num.toString() + "\t\t");
-//                System.out.print(num.toString());
-//            }
-//            else if(line.matches(REG_REAL + "\\s(\\<|\\>|\\=|(\\/\\=))\\s" + REG_REAL)) //Case of Comparison
-//            {
-//                System.out.println("Comparison");
-//                Number a = new Number(Double.parseDouble(line.substring(0,line.indexOf(" "))));
-//                Number b = new Number(Double.parseDouble(line.substring(line.lastIndexOf(" "), line.length())));
-//                
-//                boolean result = false;
-//                String operator = line.charAt(line.indexOf(" ")+1) + "";
-//                switch(operator)
-//                {
-//                    case "<":
-//                        result = a.compareTo(b) < 0;
-//                        break;
-//                    case ">":
-//                        result = a.compareTo(b) > 0;
-//                        break;
-//                    case "=":
-//                        result = a.equals(b);
-//                        break;
-//                    case "/=":
-//                        result = !a.equals(b);
-//                        break;
-//                }
-//                System.out.print(a.toString() + " " + operator + " " + b.toString() + "\t\t" + result);
-//            }
-//            else if(line.matches(REG_REAL + "i"))
-//            {
-//                System.out.println("Imaginary");
-//                ComplexNumber num = new ComplexNumber(0, Double.parseDouble(line.substring(0,line.length()-1)));
-//                
-//                System.out.print(num.toString() + "\t\t");
-//                System.out.print(num.toString());
-//            }
-//            else if(line.matches(REG_REAL))
-//            {
-//                System.out.println("Real");
-//                Number num = new Number(Double.parseDouble(line));
-//                
-//                System.out.print(num.toString() + "\t\t");
-//                System.out.print(num.toString());
-//            }
-//            else
-//            {
-//                System.out.println("Error");
-//                continue;
-//            }
-            System.out.println();
+            //Match Pattern and Seperate Parts
+            Matcher pos = Pattern.compile(REG_COMPLEX + "|" + REG_IMAGINARY + "|" + REG_REAL + "|" + REG_COMPARE + "|" + REG_PLUSMINUS).matcher(line);
+            String[] parts = {"","",""};
+            for(int i = 0; i < parts.length; i++)
+                if(pos.find())
+                    parts[i] = pos.group();
+            
+            //Create Number/ComplexNumber Objects for Inputs
+            Object ob1 = (!parts[0].equals(""))? getObject(parts[0]) : null;
+            Object ob2 = (!parts[2].equals(""))? getObject(parts[2]) : null;
+            Object res = (ob2 == null)? ob1 : evaluate(ob1, ob2, parts[1]);
+            
+            //Output Original Values
+            String inNum1 = "", inNum2 = "", outNum = "";
+            if(ob1 instanceof ComplexNumber || ob1 instanceof Number)
+                inNum1 = "(" + ob1.toString() + ")";
+            if(ob2 instanceof ComplexNumber || ob2 instanceof Number)
+                inNum2 = "(" + ob2.toString() + ")";
+            
+            //Output Result
+            if(res instanceof ComplexNumber || res instanceof Number)
+                outNum = "(" + res.toString() + ")";
+            else if(res instanceof Boolean)
+                outNum = ((Boolean) res) + "";
+            
+            //Formatted Output, Writes to File
+            out.format("%-16s%-2s%-16s\t%s%n", inNum1, parts[1], inNum2, outNum);
         }
         
+        //Close Reader/Writer
         in.close();
         out.close();
+    }
+    
+    //Returns Corresponding Object for Input Type
+    public static Object getObject(String str)
+    {
+        if(str.matches(REG_COMPLEX))
+        {
+            double real = Double.parseDouble(str.substring(0, str.indexOf(" ")));
+            double imaginary = ((str.contains("-")) ? -1 : 1) * Double.parseDouble(str.substring(str.lastIndexOf(" "), str.indexOf("i")));
+            return new ComplexNumber(real, imaginary);
+        }
+        else if(str.matches(REG_IMAGINARY))
+        {
+            double imaginary = Double.parseDouble(str.substring(0, str.indexOf("i")));
+            return new ComplexNumber(0,imaginary);
+        }
+        else if(str.matches(REG_REAL))
+        {
+            double real = Double.parseDouble(str);
+            return new Number(real);
+        }
+        return null;
+    }
+    
+    //Does Math
+    public static Object evaluate(Object a, Object b, String op)
+    {
+        ComplexNumber comA = (a instanceof ComplexNumber)? (ComplexNumber) a :
+                (a instanceof Number)? new ComplexNumber(((Number)a).getNumber(), 0) : new ComplexNumber(0,0);
+        ComplexNumber comB = (b instanceof ComplexNumber)? (ComplexNumber)b :
+                (b instanceof Number)? new ComplexNumber(((Number)b).getNumber(), 0) : new ComplexNumber(0,0);
+        ComplexNumber result = new ComplexNumber(0,0);
+        
+        switch(op)
+        {
+            case "-":
+                //Makes Second Number Negative, Then Processes Same as +
+                comB.setImaginaryNumber(-1*comB.getImaginaryNumber());
+                comB.setNumber(-1*comB.getNumber());
+            case "+":
+                //Adds Both Attributes Independently
+                result = new ComplexNumber(
+                        comA.getNumber() + comB.getNumber(),
+                        comA.getImaginaryNumber() + comB.getImaginaryNumber());
+                break;
+            case "*":
+                //(a + bi)(c + di) -> (ac-bd) + (ad+bc)i
+                result = new ComplexNumber(
+                        comA.getNumber()*comB.getNumber()-comA.getImaginaryNumber()*comB.getImaginaryNumber(),
+                        comA.getNumber()*comB.getImaginaryNumber()+comA.getImaginaryNumber()*comB.getNumber());
+                break;
+            case "/":
+                ComplexNumber conjugate = new ComplexNumber(comB.getNumber(),comB.getImaginaryNumber()*-1); //Find Conjugate
+                //FOIL Numerator
+                ComplexNumber numer = new ComplexNumber( //A*conjugate
+                        comA.getNumber()*conjugate.getNumber()-comA.getImaginaryNumber()*conjugate.getImaginaryNumber(),
+                        comA.getNumber()*conjugate.getImaginaryNumber()+comA.getImaginaryNumber()*conjugate.getNumber());
+                //FOIL Denominator
+                ComplexNumber denom = new ComplexNumber( //B*conjugate
+                        comB.getNumber()*conjugate.getNumber()-comB.getImaginaryNumber()*conjugate.getImaginaryNumber(),
+                        comB.getNumber()*conjugate.getImaginaryNumber()+comB.getImaginaryNumber()*conjugate.getNumber());
+                //Set As Results
+                result = new ComplexNumber(
+                        numer.getNumber()/denom.getNumber(),
+                        numer.getImaginaryNumber()/denom.getNumber());
+                break;
+            case "<":
+                return Math.abs(comA.getNumber()+comA.getImaginaryNumber()) < Math.abs(comB.getNumber()+comB.getImaginaryNumber());
+            case ">":
+                return Math.abs(comA.getNumber()+comA.getImaginaryNumber()) > Math.abs(comB.getNumber()+comB.getImaginaryNumber());
+            case "=":
+                return comA.equals(comB);
+            case "//=":
+                return !comA.equals(comB);
+        }
+        return (result.getImaginaryNumber() == 0)? new Number(result.getNumber()) : result;
     }
 }
