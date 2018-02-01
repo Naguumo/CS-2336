@@ -35,6 +35,12 @@ public class Main
                 if(pos.find())
                     parts[i] = pos.group();
             
+            //Skip Iteration if Invalid Input
+            if(parts[0].isEmpty() || parts[1].isEmpty() || parts[2].isEmpty())
+                continue;
+            
+            System.out.println(parts[0] + "," + parts[1] + "," + parts[2]);
+            
             //Create Number/ComplexNumber Objects for Inputs
             Object ob1 = (!parts[0].equals(""))? getObject(parts[0]) : null;
             Object ob2 = (!parts[2].equals(""))? getObject(parts[2]) : null;
@@ -43,13 +49,13 @@ public class Main
             //Output Original Values
             String inNum1 = "", inNum2 = "", outNum = "";
             if(ob1 instanceof ComplexNumber || ob1 instanceof Number)
-                inNum1 = "(" + ob1.toString() + ")";
+                inNum1 = ob1.toString();
             if(ob2 instanceof ComplexNumber || ob2 instanceof Number)
-                inNum2 = "(" + ob2.toString() + ")";
+                inNum2 = ob2.toString();
             
             //Output Result
             if(res instanceof ComplexNumber || res instanceof Number)
-                outNum = "(" + res.toString() + ")";
+                outNum = res.toString();
             else if(res instanceof Boolean)
                 outNum = ((Boolean) res) + "";
             
@@ -65,34 +71,30 @@ public class Main
     //Returns Corresponding Object for Input Type
     public static Object getObject(String str)
     {
+        double real = 0, imaginary = 0;
         if(str.matches(REG_COMPLEX))
         {
-            double real = Double.parseDouble(str.substring(0, str.indexOf(" ")));
-            double imaginary = ((str.contains("-")) ? -1 : 1) * Double.parseDouble(str.substring(str.lastIndexOf(" "), str.indexOf("i")));
-            return new ComplexNumber(real, imaginary);
+            real = Double.parseDouble(str.substring(0, str.indexOf(" ")));
+            imaginary = ((str.contains("-")) ? -1 : 1) * Double.parseDouble(str.substring(str.lastIndexOf(" "), str.indexOf("i")));
         }
         else if(str.matches(REG_IMAGINARY))
-        {
-            double imaginary = Double.parseDouble(str.substring(0, str.indexOf("i")));
-            return new ComplexNumber(0,imaginary);
-        }
+            imaginary = Double.parseDouble(str.substring(0, str.indexOf("i")));
         else if(str.matches(REG_REAL))
-        {
-            double real = Double.parseDouble(str);
-            return new Number(real);
-        }
-        return null;
+            real = Double.parseDouble(str);
+        return (imaginary == 0)? new Number(real) : new ComplexNumber(real, imaginary);
     }
     
     //Does Math
     public static Object evaluate(Object a, Object b, String op)
     {
+        //Cast As ComplexNumbers Regardless of Actuality
         ComplexNumber comA = (a instanceof ComplexNumber)? (ComplexNumber) a :
                 (a instanceof Number)? new ComplexNumber(((Number)a).getNumber(), 0) : new ComplexNumber(0,0);
         ComplexNumber comB = (b instanceof ComplexNumber)? (ComplexNumber)b :
                 (b instanceof Number)? new ComplexNumber(((Number)b).getNumber(), 0) : new ComplexNumber(0,0);
         ComplexNumber result = new ComplexNumber(0,0);
         
+        //Varied Action based on Operator
         switch(op)
         {
             case "-":
@@ -106,7 +108,7 @@ public class Main
                         comA.getImaginaryNumber() + comB.getImaginaryNumber());
                 break;
             case "*":
-                //(a + bi)(c + di) -> (ac-bd) + (ad+bc)i
+                //(a1 + a2i)(b1 + b2i) -> (a1*b1-a2*b2) + (a1*b2+a2*b1)i
                 result = new ComplexNumber(
                         comA.getNumber()*comB.getNumber()-comA.getImaginaryNumber()*comB.getImaginaryNumber(),
                         comA.getNumber()*comB.getImaginaryNumber()+comA.getImaginaryNumber()*comB.getNumber());
