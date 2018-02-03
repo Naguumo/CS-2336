@@ -13,9 +13,8 @@ public class ComplexNumber extends Number
     
     public double getImaginaryNumber(){return nImaginary;}
     public void setImaginaryNumber(double n){nImaginary = n;}
-    public String toString(){return (this.getNumber() != 0 ? //Checks if has Real Number Component
-            String.format("%.2f", this.getNumber()) + //Formats with 2 Decimal Place Formatting
-                ((this.getImaginaryNumber() < 0)? "-" : "+") : "") + //Checks for proper Operation Symbol
-            String.format("%.2fi", Math.abs(nImaginary));} //Formats with 2 Decimal Place Formatting
+    public String toString(){return (this.getNumber() == 0)? //Checks if has Real Number Component -> Is Complex Number, Not Imaginary
+                String.format("%.2fi", nImaginary): //Formats with 2 Decimal Place Formatting
+                String.format("%.2f%s%.2fi",this.getNumber(), (nImaginary > 0)?"+":"-", Math.abs(nImaginary));} //Corrects to proper Operation Symbol
     public boolean equals(ComplexNumber a){return nImaginary == a.getImaginaryNumber() && this.getNumber() == a.getNumber();}
 }
