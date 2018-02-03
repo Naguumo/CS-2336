@@ -58,7 +58,6 @@ public class Main
                 outNum = ((Boolean) res) + "";
             
             //Formatted Output, Writes to File
-            System.out.printf("%-30s%-1s %n", inNum1 + " " + parts[1] + " " + inNum2, outNum);
             out.format("%-30s%-1s %n", inNum1 + " " + parts[1] + " " + inNum2, outNum);
         }
         
