@@ -12,7 +12,7 @@ public class Main
 {
     private static final String REG_REAL = "\\-?\\d+\\.?\\d*"; //REGEX for Real Number
     private static final String REG_IMAGINARY = REG_REAL + "i"; //REGEX for Imaginary Number
-    private static final String REG_COMPLEX = REG_REAL + " [+\\-] " + REG_REAL + "i"; //REGEX for Complex Number
+    private static final String REG_COMPLEX = REG_REAL + "[+\\-]" + REG_REAL + "i"; //REGEX for Complex Number
     
     private static final String REG_PLUSMINUS = "[+\\-\\*\\/]"; //REGEX for +,-,*,/
     private static final String REG_COMPARE = "<|>|=|(\\/=)"; //REGEX for <,>,=,/=
@@ -39,8 +39,6 @@ public class Main
             if(parts[0].isEmpty() || parts[1].isEmpty() || parts[2].isEmpty())
                 continue;
             
-            System.out.println(parts[0] + "," + parts[1] + "," + parts[2]);
-            
             //Create Number/ComplexNumber Objects for Inputs
             Object ob1 = (!parts[0].equals(""))? getObject(parts[0]) : null;
             Object ob2 = (!parts[2].equals(""))? getObject(parts[2]) : null;
@@ -60,7 +58,8 @@ public class Main
                 outNum = ((Boolean) res) + "";
             
             //Formatted Output, Writes to File
-            out.format("%-16s%-2s%-16s\t%s%n", inNum1, parts[1], inNum2, outNum);
+            System.out.printf("%-30s%-1s %n", inNum1 + " " + parts[1] + " " + inNum2, outNum);
+            out.format("%-30s%-1s %n", inNum1 + " " + parts[1] + " " + inNum2, outNum);
         }
         
         //Close Reader/Writer
@@ -75,14 +74,20 @@ public class Main
         double real = 0, imaginary = 0;
         if(str.matches(REG_COMPLEX))
         {
-            real = Double.parseDouble(str.substring(0, str.indexOf(" ")));
-            imaginary = ((str.contains("-")) ? -1 : 1) * Double.parseDouble(str.substring(str.lastIndexOf(" "), str.indexOf("i")));
+            real = (str.contains("-")) ? 
+                    Double.parseDouble(str.substring(0, str.indexOf("-"))) :
+                    Double.parseDouble(str.substring(0, str.indexOf("+")));
+            imaginary = (str.contains("-")) ? 
+                    Double.parseDouble(str.substring(str.indexOf("-"), str.indexOf("i"))) * -1 :
+                    Double.parseDouble(str.substring(str.indexOf("+"), str.indexOf("i")));
         }
         else if(str.matches(REG_IMAGINARY))
             imaginary = Double.parseDouble(str.substring(0, str.indexOf("i")));
         else if(str.matches(REG_REAL))
             real = Double.parseDouble(str);
-        return (imaginary == 0)? new Number(real) : new ComplexNumber(real, imaginary);
+        return (imaginary == 0)? 
+                new Number(real) :
+                new ComplexNumber(real, imaginary);
     }
     
     //Does Math
