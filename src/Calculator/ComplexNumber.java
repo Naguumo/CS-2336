@@ -13,6 +13,7 @@ public class ComplexNumber extends Number
     
     public double getImaginaryNumber(){return nImaginary;}
     public void setImaginaryNumber(double n){nImaginary = n;}
+    @Override
     public String toString(){return (this.getNumber() == 0)? //Checks if has Real Number Component -> Is Complex Number, Not Imaginary
                 String.format("%.2fi", nImaginary): //Formats with 2 Decimal Place Formatting
                 String.format("%.2f%s%.2fi",this.getNumber(), (nImaginary > 0)?"+":"-", Math.abs(nImaginary));} //Corrects to proper Operation Symbol

@@ -45,8 +45,8 @@ public class Main
             Object res = evaluate(getObject(parts[0]), getObject(parts[2]), parts[1]);
             
             //Formatted Output, Writes to File
-            System.out.printf("%-30s%-1s %n", line, res.toString());
-            out.format("%-30s%-1s %n", line, res.toString());
+            System.out.printf("%-30s%-1s%n", line, res.toString());
+            out.format("%-30s%-1s%n", line, res.toString());
         }
         
         //Close Reader/Writer
