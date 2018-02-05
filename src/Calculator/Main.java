@@ -44,18 +44,9 @@ public class Main
             //Create Number/ComplexNumber Objects for Inputs and Evaluate
             Object res = evaluate(getObject(parts[0]), getObject(parts[2]), parts[1]);
             
-            //Output Result
-            String outNum = "";
-            if(res instanceof ComplexNumber)
-                outNum = ((ComplexNumber)res).toString();
-            else if(res instanceof Number)
-                outNum = ((Number) res).toString();
-            else if(res instanceof Boolean)
-                outNum = ((Boolean) res) + "";
-            
             //Formatted Output, Writes to File
-            System.out.printf("%-30s%-1s %n", line, outNum);
-            out.format("%-30s%-1s %n", line, outNum);
+            System.out.printf("%-30s%-1s %n", line, res.toString());
+            out.format("%-30s%-1s %n", line, res.toString());
         }
         
         //Close Reader/Writer
@@ -122,9 +113,9 @@ public class Main
                 break;
             //Simple Comparisons
             case "<":
-                return Math.abs(cA.getNumber())+Math.abs(cA.getImaginaryNumber()) < Math.abs(cB.getNumber())+Math.abs(cB.getImaginaryNumber());
+                return Math.sqrt(Math.pow(cA.getNumber(),2)+Math.pow(cA.getImaginaryNumber(),2)) < Math.sqrt(Math.pow(cB.getNumber(),2)+Math.pow(cB.getImaginaryNumber(),2));
             case ">":
-                return Math.abs(cA.getNumber())+Math.abs(cA.getImaginaryNumber()) > Math.abs(cB.getNumber())+Math.abs(cB.getImaginaryNumber());
+                return Math.sqrt(Math.pow(cA.getNumber(),2)+Math.pow(cA.getImaginaryNumber(),2)) > Math.sqrt(Math.pow(cB.getNumber(),2)+Math.pow(cB.getImaginaryNumber(),2));
             case "=":
                 return cA.equals(cB);
             case "//=":
