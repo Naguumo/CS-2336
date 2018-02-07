@@ -11,5 +11,6 @@ public class Number
     public void setNumber(double n){nReal = n;}
     @Override
     public String toString(){return String.format("%.2f", nReal);} //Formats with 2 Decimal Place Formatting
-    public boolean equals(double a){return nReal == a;} //Required but Useless
+    @Override
+    public boolean equals(Object a){return (a instanceof Number) ? nReal == ((Number)a).getNumber() : false;} //Required but Useless
 }

@@ -75,7 +75,7 @@ public class Main
         //Cast As ComplexNumbers Regardless of Actuality
         ComplexNumber cA = (a instanceof ComplexNumber)? (ComplexNumber)a : new ComplexNumber(((Number)a).getNumber(), 0);
         ComplexNumber cB = (b instanceof ComplexNumber)? (ComplexNumber)b : new ComplexNumber(((Number)b).getNumber(), 0);
-        ComplexNumber result = new ComplexNumber(0,0);
+        ComplexNumber result = null;
         
         //Varied Action based on Operator
         switch(op)
@@ -84,6 +84,7 @@ public class Main
                 //Makes Second Number Negative, Then Processes Same as +
                 cB.setImaginaryNumber(-1*cB.getImaginaryNumber());
                 cB.setNumber(-1*cB.getNumber());
+                //Doesn't break, continues on to same processes as addition
             case "+":
                 //Adds Both Attributes Independently
                 result = new ComplexNumber(
@@ -103,19 +104,17 @@ public class Main
                         cA.getNumber()*conjugate.getNumber()-cA.getImaginaryNumber()*conjugate.getImaginaryNumber(),
                         cA.getNumber()*conjugate.getImaginaryNumber()+cA.getImaginaryNumber()*conjugate.getNumber());
                 //FOIL Denominator
-                ComplexNumber denom = new ComplexNumber( //B*conjugate
-                        cB.getNumber()*conjugate.getNumber()-cB.getImaginaryNumber()*conjugate.getImaginaryNumber(),
-                        cB.getNumber()*conjugate.getImaginaryNumber()+cB.getImaginaryNumber()*conjugate.getNumber());
+                double denom = cB.getNumber()*conjugate.getNumber()-cB.getImaginaryNumber()*conjugate.getImaginaryNumber(); //B*conjugate
                 //Set As Results
                 result = new ComplexNumber(
-                        numer.getNumber()/denom.getNumber(),
-                        numer.getImaginaryNumber()/denom.getNumber());
+                        numer.getNumber()/denom,
+                        numer.getImaginaryNumber()/denom);
                 break;
-            //Simple Comparisons
+            //Comparison Operators
             case "<":
-                return Math.sqrt(Math.pow(cA.getNumber(),2)+Math.pow(cA.getImaginaryNumber(),2)) < Math.sqrt(Math.pow(cB.getNumber(),2)+Math.pow(cB.getImaginaryNumber(),2));
+                return cA.compareTo(cB) < 0;
             case ">":
-                return Math.sqrt(Math.pow(cA.getNumber(),2)+Math.pow(cA.getImaginaryNumber(),2)) > Math.sqrt(Math.pow(cB.getNumber(),2)+Math.pow(cB.getImaginaryNumber(),2));
+                return cA.compareTo(cB) > 0;
             case "=":
                 return cA.equals(cB);
             case "//=":
