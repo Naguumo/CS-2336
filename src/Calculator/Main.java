@@ -75,7 +75,7 @@ public class Main
         //Cast As ComplexNumbers Regardless of Actuality
         ComplexNumber cA = (a instanceof ComplexNumber)? (ComplexNumber)a : new ComplexNumber(((Number)a).getNumber(), 0);
         ComplexNumber cB = (b instanceof ComplexNumber)? (ComplexNumber)b : new ComplexNumber(((Number)b).getNumber(), 0);
-        ComplexNumber result = null;
+        ComplexNumber result = new ComplexNumber(0,0);
         
         //Varied Action based on Operator
         switch(op)
