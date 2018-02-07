@@ -60,8 +60,8 @@ public class Main
         if(str.matches(REG_COMPLEX))
             //Checks for Proper Substring Match and Assigns to Values
             return new ComplexNumber(
-                Double.parseDouble(str.substring(0, str.lastIndexOf(str.contains("-") ?"-":"+"))),
-                Double.parseDouble(str.substring(str.lastIndexOf(str.contains("-") ?"-":"+"), str.indexOf("i"))));
+                Double.parseDouble(str.substring(0, str.lastIndexOf(str.substring(1).contains("-") ?"-":"+"))),
+                Double.parseDouble(str.substring(str.lastIndexOf(str.substring(1).contains("-") ?"-":"+"), str.indexOf("i"))));
         else if(str.matches(REG_IMAGINARY))
             return new ComplexNumber(0, Double.parseDouble(str.substring(0, str.indexOf("i"))));
         else if(str.matches(REG_REAL))

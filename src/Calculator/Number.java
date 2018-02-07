@@ -3,7 +3,7 @@ package Calculator;
 
 public class Number
 {
-    private double nReal; //Stores Real Numbers
+    protected double nReal; //Stores Real Numbers
     
     public Number(double n){nReal = n;} //Constructor
     
