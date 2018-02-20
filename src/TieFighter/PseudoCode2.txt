@@ -1,0 +1,29 @@
+//Ishaan Bharal (ixb170930)
+Package TieFighter
+
+Main Class
+{
+	Main Method
+	{
+		//Initialize Scanner
+		//Declare Arrays
+		
+		for()
+	}
+
+	Calculate Method - Returns Double - Takes Double[][]
+	{
+	}
+
+	Output Method - Returns Void - Takes String[], Double[]
+	{
+	}
+}
+
+Payload Class
+{
+}
+
+LinkedList Class
+{
+}
