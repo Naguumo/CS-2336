@@ -14,47 +14,60 @@ public class Main
         //Create Reader
         Scanner in = new Scanner(new File("pilot_routes.txt"));
         
-        //Declare Arrays
-        String [] names = new String[20];
-        double[][][] coords = new double[20][16][2];
+        //Declare List
+        Linker<Payload> list = new Linker<>();
         
-        //Iterate through lines
-        for(int i = 0; i < coords.length && in.hasNextLine(); i++) //Exit if theres no more text
+        //Iterate through Lines
+        while(in.hasNextLine()) //Exit if theres no more text
         {
+            //Take in Line
             String txt = in.nextLine();
             
             //Makes sure input is valid
             if(!txt.matches("\\w+\\s?\\w*(\\s-?\\d*\\.?\\d*,-?\\d*\\.?\\d*)+"))
                 continue;
             
-            //Assign first element as name of pilot
-            names[i] = txt.split("(\\s-?\\d*\\.?\\d*,-?\\d*\\.?\\d*)+")[0];
+            //Add Object to List with Name
+            list.addLast(new Payload(txt.split("(\\s-?\\d*\\.?\\d*,-?\\d*\\.?\\d*)+")[0]));
             
             //Split Line of text by space( )
-            String[] line = txt.substring(names[i].length()).split(" ");
+            String[] line = txt.substring(list.getLast().getPilot().length()).trim().split(" ");
             
             //Iterate through coordinates
-            for(int j = 1; j < line.length; j++)
+            double[][] coords = new double[16][2];
+            for(int i = 0; i < line.length; i++)
             {
                 //Split each part by comma(,)
-                String[] xy = line[j].split(",");
+                String[] xy = line[i].split(",");
                 
                 //Assign values to x or y coordinates
-                coords[i][j-1][0] = Double.parseDouble(xy[0]);
-                coords[i][j-1][1] = Double.parseDouble(xy[1]);
+                coords[i][0] = Double.parseDouble(xy[0]);
+                coords[i][1] = Double.parseDouble(xy[1]);
             }
+            //Iterate for calculations
+            list.getLast().setArea(calculate(coords));
         }
         
         //Close Reader
         in.close();
         
-        //Iterate for calculations
-        double[] summations = new double[names.length];
-        for(int i = 0; i < names.length; i++)
-            summations[i] = calculate(coords[i]);
+        //Create 2nd Reader
+        Scanner cmd = new Scanner(new File("commands.txt"));
+        while(cmd.hasNextLine())
+        {
+            String txt = cmd.nextLine();
+            if(!txt.matches("(sort (area|pilot) (asc))|(\\w+ ?\\w*\\n)|(\\d+)"))
+            {
+                //Needs Implementation//
+            }
+            //Needs Implementation//
+        }
+        
+        //Close Reader
+        cmd.close();
         
         //Output to text file
-        output(names, summations);
+        outputAreas(list);
     }
 
     //Perform Summation Action
@@ -71,20 +84,24 @@ public class Main
     }
     
     //Print Information to text file
-    public static void output(String[] names, double[] areas) throws IOException
+    public static <E> void outputAreas(Linker<E> list) throws IOException
     {
-        //Create Writer
         PrintWriter out = new PrintWriter(new File("pilot_areas.txt"));
-
-        //Iterate through lines
-        for(int i = 0; i < names.length; i++)
-            if(names[i] != null) //Don't Write Blanks
+        if(!(list.getFirst() instanceof Payload))
+            return;
+        for(int i = 0; i < list.size(); i++)
+        {
+            Payload item = (Payload)list.get(i);
+            if(item != null)
             {
-                System.out.printf("%-15s %-5.2f %n", names[i], areas[i]);
-                out.format("%-15s %-5.2f %n", names[i], areas[i]);
+                System.out.printf("%-15s %-5.2f %n", item.getPilot(), item.getArea());
+                out.format("%-15s %-5.2f %n", item.getPilot(), item.getArea());
             }
-
-        //Close Writer
-        out.close();
+        }
+    }
+    
+    public static void outputResults()
+    {
+        //Needs Implementation//
     }
 }
