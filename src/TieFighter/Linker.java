@@ -2,52 +2,150 @@
 
 package TieFighter;
 
-import java.util.AbstractSequentialList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
-public class Linker<E> 
-    extends AbstractSequentialList<E>
-    implements List<E>, Deque<E>, Cloneable, java.io.Serializable
+public class Linker<E>
 {
     private LinkerNode<E> first;
     private LinkerNode<E> last;
     private int size = 0;
     
-    public Linker(Collection<? extends E> items)
+    //Constructor
+    public Linker(E[] stuff){for (E thing : stuff)this.addLast(thing);}
+    public Linker(){}
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public E get(int index){return getNode(index).item;}
+    private LinkerNode<E> getNode(int index)
     {
-        this();
-        Object[] stuff = items.toArray();
-        for (int i = 0; i < stuff.length; i++)
+        if (!(index >= 0 && index < size))
+            throw new IndexOutOfBoundsException("");
+        if (index < (size >> 1)) 
         {
-            addLast((E)stuff[i]);
+            LinkerNode<E> x = first;
+            for (int i = 0; i < index; i++)
+                x = x.next;
+            return x;
+        }
+        else 
+        {
+            LinkerNode<E> x = last;
+            for (int i = size - 1; i > index; i--)
+                x = x.prev;
+            return x;
         }
     }
     
-    public Linker(){super();}
-    
-    @Override
-    public String toString()
+    public int indexOf(E e)
     {
-        //Needs Implementation//
-        return super.toString();
+        int index = 0;
+        for(LinkerNode<E> x = first; x != null; x = x.next)
+        {
+            if(e == null ? x.item == null : e.equals(x.item))
+                return index;
+            index++;
+        }
+        return -1;
     }
     
-    public void sort()
+    public void add(int index, E e)
     {
-        //Needs Implementation//
+        if(index == 0)
+            addFirst(e);
+        else if(index >= size)
+            addLast(e);
+        else
+        {
+            LinkerNode<E> prev = first;
+            for(int i = 1; i < index; i++)
+                prev = prev.next;
+            LinkerNode<E> next = prev.next;
+            LinkerNode<E> newNode = new LinkerNode<>(e, prev, prev.next);
+            prev.next = newNode;
+            next.prev = newNode;
+            size++;
+        }
     }
     
+    public E remove(int index)
+    {
+        if(index < 0 || index >= size)
+            return null;
+        else if(index == 0)
+            return removeFirst();
+        else if(index == size - 1)
+            return removeLast();
+        else
+        {
+            LinkerNode<E> prev = first;
+            for(int i = 1; i < index; i++)
+                prev = prev.next;
+            LinkerNode<E> curr = prev.next;
+            LinkerNode<E> next = curr.next;
+            prev.next = next;
+            next.prev = prev;
+            size--;
+            return curr.item;
+        }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public void sort(LinkerNode<E> node, boolean asc)
+    {
+        System.out.println(node.item);
+    }
+    
+    public void sort(boolean area, boolean asc)
+    {
+        //No Sorting If Not Actually A List
+        if(size <= 1 || first == null || last == null)
+            return;
+        
+        //Set Proper Flags
+        for(int i = 0; i < size; i++)
+        {
+            if(!(get(i) instanceof Payload))
+                return;
+            Payload<E> p = (Payload)get(i);
+            p.setFlag(area);
+        }
+        
+        sort(getNode((size-1)/2), asc);
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public int search(String txt, boolean area)
+    {
+        double num = area ? Double.parseDouble(txt) : 0;
+        for(int i = 0; i < size; i++)
+        {
+            if(!(get(i) instanceof Payload))
+                continue;
+            Payload p = (Payload)get(i);
+            if(area ? Math.round(p.getArea()*100) == num*100 : p.getPilot().equals(txt))
+                return i;
+        }
+        return -1;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public int size(){return size;}
+    
     @Override
+    public String toString(){return first.item.toString() + toString(first.next) + last.item.toString();}
+    private String toString(LinkerNode node){return node == last ? "" : node.item.toString() + toString(node.next);}//Recursive Implementation
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    //Methods For First Pointer
     public E getFirst(){return first.item;}
-    @Override
+    
     public void addFirst(E item)
     {
-        LinkerNode prevFirst = first;
-        LinkerNode newFirst = new LinkerNode(item, null, prevFirst);
+        LinkerNode<E> prevFirst = first;
+        LinkerNode<E> newFirst = new LinkerNode<>(item, null, prevFirst);
         first = newFirst;
         if(prevFirst == null)
             last = newFirst;
@@ -55,9 +153,26 @@ public class Linker<E>
             prevFirst.prev = newFirst;
         size++;
     }
-    @Override
+    
+    public E removeFirst()
+    {
+        if(size == 0)
+            return null;
+        LinkerNode<E> f = first;
+        LinkerNode<E> next = f.next;
+        next.prev = null;
+        first = next;
+        size--;
+        if(first == null)
+            last = null;
+        return f.item;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    //Methods For Last Pointer
     public E getLast(){return last.item;}
-    @Override
+    
     public void addLast(E item)
     {
         LinkerNode prevLast = last;
@@ -70,141 +185,40 @@ public class Linker<E>
         size++;
     }
     
-    @Override
-    public int size()
-    {
-        return size;
-    }
-    
-    @Override
-    public ListIterator<E> listIterator(int index)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean offerFirst(E e)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean offerLast(E e)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E removeFirst()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public E removeLast()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E pollFirst()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E pollLast()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E peekFirst()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E peekLast()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeFirstOccurrence(Object o)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeLastOccurrence(Object o)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean offer(E e)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E remove()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E poll()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E element()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E peek()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void push(E e)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public E pop()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Iterator<E> descendingIterator()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(size == 0)
+            return null;
+        LinkerNode<E> l = last;
+        LinkerNode<E> prev = l.prev;
+        prev.next = null;
+        last = prev;
+        size--;
+        if(last == null)
+            first = null;
+        return l.item;
     }
     
-    @Override
-    public E get(int index) 
+    ///////////////////////////////////////////////////////////////////////////
+    
+    //Node Class
+    private class LinkerNode<E>
     {
-        if (!(index >= 0 && index < size))
-            throw new IndexOutOfBoundsException("");
-        if (index < (size >> 1)) {
-            LinkerNode<E> x = first;
-            for (int i = 0; i < index; i++)
-                x = x.next;
-            return x.item;
-        } else {
-            LinkerNode<E> x = last;
-            for (int i = size - 1; i > index; i--)
-                x = x.prev;
-            return x.item;
+        E item;
+        LinkerNode<E> next;
+        LinkerNode<E> prev;
+
+        public LinkerNode(E obj, LinkerNode prev, LinkerNode next)
+        {
+            this.item = obj;
+            this.prev = prev;
+            this.next = next;
         }
+        
+        //Redundant and Unnecessary
+        public LinkerNode<E> getNext(){return next;}
+        public void setNext(LinkerNode<E> next){this.next = next;}
+        public LinkerNode<E> getPrev(){return prev;}
+        public void setPrev(LinkerNode<E> prev){this.prev = prev;}
     }
 }

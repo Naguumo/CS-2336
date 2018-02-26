@@ -6,14 +6,20 @@ public class Payload<E> implements Comparable<E>
 {
     private String pilot;
     private double area;
-    private boolean flag;
+    private boolean flag = true; //True = Area, False = Pilot
     
     public <E extends Comparable<E>> Payload(String pilot){this.pilot = pilot;}
 
     @Override
     public int compareTo(E obj)
     {
-        return obj instanceof Payload ? (int)(this.area - ((Payload)obj).area) : null;
+        return obj instanceof Payload ? (flag ? (int)(this.area - ((Payload)obj).area) : (this.pilot.compareTo(((Payload)obj).pilot))) : null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("%-15s %-5.2f %n", this.pilot, this.area);
     }
 
     public String getPilot(){return pilot;}
