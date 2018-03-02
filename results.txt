@@ -1,1 +1,4 @@
-sort area asc       
+SORT PILOT ASC      Head: BB4,      Tail: R2D5
+SORT AREA DEC       Head: 1731.95,  Tail: 6.42
+BB8                 Found
+6.42                Found

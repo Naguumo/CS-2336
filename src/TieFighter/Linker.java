@@ -4,117 +4,171 @@ package TieFighter;
 
 public class Linker<E>
 {
-    private LinkerNode<E> first;
-    private LinkerNode<E> last;
+    private LinkerNode<E> first, last;
     private int size = 0;
     
-    //Constructor
-    public Linker(E[] stuff){for (E thing : stuff)this.addLast(thing);}
+    //Constructors
+    private Linker(LinkerNode<E> node){first = last = node;}//Useless but Required
     public Linker(){}
     
     ///////////////////////////////////////////////////////////////////////////
     
+    //Getter Method
     public E get(int index){return getNode(index).item;}
+    
+    //Getter for Nodes using index
     private LinkerNode<E> getNode(int index)
     {
         if (!(index >= 0 && index < size))
             throw new IndexOutOfBoundsException("");
-        if (index < (size >> 1)) 
-        {
-            LinkerNode<E> x = first;
+         
+        LinkerNode<E> node = first;
+        if (index < (size >> 1))
             for (int i = 0; i < index; i++)
-                x = x.next;
-            return x;
-        }
+                node = node.next;
         else 
         {
-            LinkerNode<E> x = last;
+            node = last;
             for (int i = size - 1; i > index; i--)
-                x = x.prev;
-            return x;
+                node = node.prev;
         }
+        return node;
     }
     
-    public int indexOf(E e)
-    {
-        int index = 0;
-        for(LinkerNode<E> x = first; x != null; x = x.next)
-        {
-            if(e == null ? x.item == null : e.equals(x.item))
-                return index;
-            index++;
-        }
-        return -1;
-    }
-    
-    public void add(int index, E e)
+    public void add(E e){add(size, e);}
+    public final void add(int index, E item)
     {
         if(index == 0)
-            addFirst(e);
+        {
+            LinkerNode<E> prevFirst = first;
+            LinkerNode<E> newFirst = new LinkerNode<>(item, null, prevFirst);
+            first = newFirst;
+            if(prevFirst == null)
+                last = newFirst;
+            else
+                prevFirst.prev = newFirst;
+        }
         else if(index >= size)
-            addLast(e);
+        {
+            LinkerNode prevLast = last;
+            LinkerNode newLast = new LinkerNode(item, prevLast, null);
+            last = newLast;
+            if(prevLast == null)
+                first = newLast;
+            else
+                prevLast.next = newLast;
+        }
         else
         {
             LinkerNode<E> prev = first;
             for(int i = 1; i < index; i++)
                 prev = prev.next;
             LinkerNode<E> next = prev.next;
-            LinkerNode<E> newNode = new LinkerNode<>(e, prev, prev.next);
-            prev.next = newNode;
-            next.prev = newNode;
-            size++;
+            LinkerNode<E> newNode = new LinkerNode<>(item, prev, prev.next);
+            prev.next = next.prev = newNode;
         }
+        size++;
     }
     
     public E remove(int index)
     {
         if(index < 0 || index >= size)
             return null;
-        else if(index == 0)
-            return removeFirst();
-        else if(index == size - 1)
-            return removeLast();
-        else
+        
+        size--;
+        if(index == 0)
         {
-            LinkerNode<E> prev = first;
-            for(int i = 1; i < index; i++)
-                prev = prev.next;
-            LinkerNode<E> curr = prev.next;
-            LinkerNode<E> next = curr.next;
-            prev.next = next;
-            next.prev = prev;
-            size--;
-            return curr.item;
+            E thing = first.item;
+            if(first.next != null)
+                first.next.prev = null;
+            first = first.next;
+            last = first == null ? null : last;
+            return thing;
         }
+        else if(index == size - 1)
+        {
+            E thing = last.item;
+            if(last.prev != null)
+                last.prev.next = null;
+            last = last.prev;
+            first = last == null ? null : first;
+            return thing;
+        }
+        
+        LinkerNode<E> prev = first;
+        for(int i = 1; i < index; i++)
+            prev = prev.next;
+        E thing = prev.next.item;
+        LinkerNode<E> next = prev.next.next;
+        prev.next = next;
+        next.prev = prev;
+        return thing;
     }
-    
     ///////////////////////////////////////////////////////////////////////////
     
-    public void sort(LinkerNode<E> node, boolean asc)
+    //Merge Sort
+    //Split Portion
+    private void sort(Linker<E> arr)
     {
-        System.out.println(node.item);
-    }
-    
-    public void sort(boolean area, boolean asc)
-    {
-        //No Sorting If Not Actually A List
-        if(size <= 1 || first == null || last == null)
+        if(arr.size <= 1)
             return;
         
-        //Set Proper Flags
-        for(int i = 0; i < size; i++)
+        int i = 0; //Iterator
+        
+        Linker<E> aList = new Linker<>(); //First Half
+        while(i < arr.size/2)
+            aList.add(arr.get(i++));
+
+        Linker<E> bList = new Linker<>(); //Second Half
+        while(i < arr.size)
+            bList.add(arr.get(i++));
+        
+        //Sort Sub Lists
+        sort(aList);
+        sort(bList);
+        
+        //Combine 2 Lists
+        sort((Linker<Payload>)aList, (Linker<Payload>)bList, (Linker<Payload>)arr);
+    }
+    
+    //Merge Portion
+    private void sort(Linker<Payload> a, Linker<Payload> b, Linker<Payload> arr)
+    {
+        while(arr.size != 0)
+            arr.remove(0);
+        
+        int c1=0,c2=0,c3=0; //Counters for Each List
+        while(c1 < a.size && c2 < b.size)
         {
-            if(!(get(i) instanceof Payload))
-                return;
-            Payload<E> p = (Payload)get(i);
-            p.setFlag(area);
+            if(a.get(c1).compareTo(b.get(c2)) < 0)
+                arr.add(c3++, a.get(c1++)); 
+            else
+                arr.add(c3++, b.get(c2++));
         }
         
-        sort(getNode((size-1)/2), asc);
+        while(c1 < a.size)
+            arr.add(c3++, a.get(c1++));
+        while(c2 < b.size)
+            arr.add(c3++, b.get(c2++));
+    }
+    
+    //Helper Functions
+    public void sort(){sort(true,true);}
+    public void sort(boolean area, boolean asc)
+    {
+        if(size <= 1 || first == null || last == null || !(first.item instanceof Payload))
+            return; //No Sorting If Not Actually A List
+        
+        //Set Proper Flags
+        Payload.setFlag(area);
+        Payload.setFlag2(asc);
+        
+        sort((Linker<E>)this);//Sort Recursively
     }
     
     ///////////////////////////////////////////////////////////////////////////
     
+    //Iterated Search
     public int search(String txt, boolean area)
     {
         double num = area ? Double.parseDouble(txt) : 0;
@@ -122,8 +176,7 @@ public class Linker<E>
         {
             if(!(get(i) instanceof Payload))
                 continue;
-            Payload p = (Payload)get(i);
-            if(area ? Math.round(p.getArea()*100) == num*100 : p.getPilot().equals(txt))
+            if(area ? Math.round(((Payload)get(i)).getArea()*100) == num*100 : ((Payload)get(i)).getPilot().equals(txt))
                 return i;
         }
         return -1;
@@ -131,73 +184,14 @@ public class Linker<E>
     
     ///////////////////////////////////////////////////////////////////////////
     
-    public int size(){return size;}
-    
     @Override
-    public String toString(){return first.item.toString() + toString(first.next) + last.item.toString();}
-    private String toString(LinkerNode node){return node == last ? "" : node.item.toString() + toString(node.next);}//Recursive Implementation
+    public String toString(){return toString(first);}
+    private String toString(LinkerNode node){return node == null ? "" : node.item.toString() + toString(node.next);}//Recursive Implementation
     
-    ///////////////////////////////////////////////////////////////////////////
-    
-    //Methods For First Pointer
+    //Getter Methods
     public E getFirst(){return first.item;}
-    
-    public void addFirst(E item)
-    {
-        LinkerNode<E> prevFirst = first;
-        LinkerNode<E> newFirst = new LinkerNode<>(item, null, prevFirst);
-        first = newFirst;
-        if(prevFirst == null)
-            last = newFirst;
-        else
-            prevFirst.prev = newFirst;
-        size++;
-    }
-    
-    public E removeFirst()
-    {
-        if(size == 0)
-            return null;
-        LinkerNode<E> f = first;
-        LinkerNode<E> next = f.next;
-        next.prev = null;
-        first = next;
-        size--;
-        if(first == null)
-            last = null;
-        return f.item;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////
-    
-    //Methods For Last Pointer
     public E getLast(){return last.item;}
-    
-    public void addLast(E item)
-    {
-        LinkerNode prevLast = last;
-        LinkerNode newLast = new LinkerNode(item, prevLast, null);
-        last = newLast;
-        if(prevLast == null)
-            first = newLast;
-        else
-            prevLast.next = newLast;
-        size++;
-    }
-    
-    public E removeLast()
-    {
-        if(size == 0)
-            return null;
-        LinkerNode<E> l = last;
-        LinkerNode<E> prev = l.prev;
-        prev.next = null;
-        last = prev;
-        size--;
-        if(last == null)
-            first = null;
-        return l.item;
-    }
+    public int size(){return size;}
     
     ///////////////////////////////////////////////////////////////////////////
     
