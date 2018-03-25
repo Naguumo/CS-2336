@@ -1,4 +1,9 @@
-sort pilot asc
-sort area dec
-BB8
-6.42
+sort jedi
+search Chewbacca
+Jar Jar Binks
+C.3PO
+237.89%
+Dengar
+12A.2
+Ke$ha
+100.00

@@ -1,20 +1,10 @@
-R2D4            1731.95 
-R1D8            1731.95 
-BB8             1731.95 
-R2D1            913.09 
-C3P2            913.09 
-BB4             913.09 
-R2D5            776.81 
-R2D2            776.81 
-R1D9            776.81 
-R1D6            776.81 
-C3P3            776.81 
-BB7             776.81 
-R1D10           84.20 
-C3P0            84.20 
-BB6             84.20 
-R2D3            53.50 
-R1D7            53.50 
-C3P4            53.50 
-C3P1            6.42  
-BB5             6.42  
+Boshek          133.70 
+Dengar          83.20 
+Finn            237.13 
+Malakili        1731.95 
+Oleg            776.81 
+General Grievous 100.00 
+Palpatine       778.06 
+Baron Papanoida 53.50 
+Captain Phasma  84.20 
+Jar Jar Binks   6.42  

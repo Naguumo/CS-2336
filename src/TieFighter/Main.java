@@ -19,7 +19,7 @@ public class Main
         while(in.hasNextLine()) //Exit if theres no more text
         {
             String txt = in.nextLine(); //Take in Line
-            if(!txt.matches("[\\w-']+\\s?[\\w-']*(\\s-?\\d*\\.?\\d*,-?\\d*\\.?\\d*)+"))
+            if(!txt.matches("([\\w-']+\\s?)+(\\s-?\\d+\\.?\\d*,-?\\d+\\.?\\d*)+"))
                 continue;//Makes sure input is valid
             
             //Add Object to List using Name
@@ -32,9 +32,11 @@ public class Main
             ArrayList<Double[]> coords = new ArrayList<>();
             for (String piece : line)
             {
-                String[] xy = piece.split(","); //Split each pair by comma(,)
-                Double[] dub = {Double.parseDouble(xy[0]),Double.parseDouble(xy[1])};
+                try{
+		String[] xy = piece.split(","); //Split each pair by comma(,)
+		Double[] dub = {Double.parseDouble(xy[0]),Double.parseDouble(xy[1])};
                 coords.add(dub); //Assign values to x or y coordinates
+		}catch(NumberFormatException e){}
             }
             list.getLast().setArea(calculate(coords)); //Calculate and Assign Area
         }
@@ -67,9 +69,11 @@ public class Main
             else if(txt.matches("\\d+\\.?\\d*")) //Case for Number Search
                 //Formatted Output, calls Search function
                 txt = String.format("%-20s%s%n",txt.toUpperCase(),(list.search(txt, true) == -1)? "Not Found" : "Found");
-            else if(txt.matches("[\\w-']+\\ ?[\\w-']*")) //Case for Name Search
+            else if(txt.matches("([\\w-']+\\s?)+")) //Case for Name Search
                 //Formatted Output, calls Search function
                 txt = String.format("%-20s%s%n",txt.toUpperCase(),(list.search(txt, false) == -1)? "Not Found" : "Found");
+	    else
+		continue;
 
             //Writes to Result File
             System.out.print(txt);

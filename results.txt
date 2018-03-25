@@ -1,4 +1,5 @@
-SORT PILOT ASC      Head: BB4,      Tail: R2D5
-SORT AREA DEC       Head: 1731.95,  Tail: 6.42
-BB8                 Found
-6.42                Found
+SORT JEDI           Not Found
+SEARCH CHEWBACCA    Not Found
+JAR JAR BINKS       Found
+DENGAR              Found
+100.00              Found
