@@ -19,6 +19,7 @@ public class Main
         while(in.hasNextLine()) //Exit if theres no more text
         {
             String txt = in.nextLine(); //Take in Line
+//ERROR: Used lazy modifier instead of greedy, only assessed 2 names max
             if(!txt.matches("([\\w-']+\\s?)+(\\s-?\\d+\\.?\\d*,-?\\d+\\.?\\d*)+"))
                 continue;//Makes sure input is valid
             
@@ -36,6 +37,7 @@ public class Main
 		String[] xy = piece.split(","); //Split each pair by comma(,)
 		Double[] dub = {Double.parseDouble(xy[0]),Double.parseDouble(xy[1])};
                 coords.add(dub); //Assign values to x or y coordinates
+//ERROR: random mistakes at end of line, tried to parse empty strings
 		}catch(NumberFormatException e){}
             }
             list.getLast().setArea(calculate(coords)); //Calculate and Assign Area
@@ -69,10 +71,12 @@ public class Main
             else if(txt.matches("\\d+\\.?\\d*")) //Case for Number Search
                 //Formatted Output, calls Search function
                 txt = String.format("%-20s%s%n",txt.toUpperCase(),(list.search(txt, true) == -1)? "Not Found" : "Found");
+//ERROR: Used lazy modifier instead of greedy, only worked assessed 2 names max
             else if(txt.matches("([\\w-']+\\s?)+")) //Case for Name Search
                 //Formatted Output, calls Search function
                 txt = String.format("%-20s%s%n",txt.toUpperCase(),(list.search(txt, false) == -1)? "Not Found" : "Found");
 	    else
+//ERROR: Previously outputted improper cases instead of skipping to next loop
 		continue;
 
             //Writes to Result File

@@ -1,0 +1,26 @@
+Ishaan Bharal(ixb170930)
+Regrade Project 3
+
+ERROR #1:
+FILE - MAIN, LINE - 23
+Problem with REGEX, used a * instead of a + and ended up only dealing with 2 names
+Messed with edge cases such as "Jar Jar Binks" or "R2_D2"
+Fixed by editing REGEX to use greedy modifier instead
+
+ERROR #2:
+FILE - MAIN, LINE - 41
+Problem attempted to parse empty lines at end of line instead of skipping
+Messed random spaces at ends of lines
+Fixed by adding try catch to deal with NumberFormatExceptions that could only be caused by this case
+
+ERROR #3:
+FILE - MAIN, LINE - 75
+Problem with REGEX, same as ERROR #1
+Messed with commands being read in
+Fixed by editing REGEX to use greedy modifier instead
+
+ERROR #4:
+FILE - MAIN, LINE - 80
+Problem attempted to output invalid results
+Messed with any case that had invalid input
+Fixed by adding in a continue that was removed during testing

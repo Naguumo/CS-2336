@@ -1,11 +1,9 @@
 //Ishaan Bharal(ixb170930)
 package Paradox;
 
-import java.lang.reflect.Method;
-
 public class BST<E>
 {
-    Node<E> root;
+    private Node<E> root;
     
     public BST()
     {
