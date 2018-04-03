@@ -3,8 +3,8 @@ package Paradox;
 
 public class Node<E>
 {
-    E item;
-    Node<E> left, right;
+    public E item;
+    private Node<E> left, right;
 
     public Node(E item)
     {
@@ -18,23 +18,9 @@ public class Node<E>
 	this.right = right;
     }
 
-    public Node<E> getLeft()
-    {
-	return left;
-    }
+    public Node<E> getLeft(){return left;}
+    public void setLeft(Node<E> left){this.left = left;}
 
-    public void setLeft(Node<E> left)
-    {
-	this.left = left;
-    }
-
-    public Node<E> getRight()
-    {
-	return right;
-    }
-
-    public void setRight(Node<E> right)
-    {
-	this.right = right;
-    }
+    public Node<E> getRight(){return right;}
+    public void setRight(Node<E> right){this.right = right;}
 }
