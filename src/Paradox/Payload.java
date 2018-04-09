@@ -36,6 +36,9 @@ public class Payload implements Combinable<Payload>
 	int expoInt = exponent+1;
 	double num = ((double)coefficient) / ((double)expoInt);
 	
+	if(exponent == -1)
+	    return coefficient + "lnx + ";
+	
 	String coff, expo;
 	if(num == 0)
 	    return "";
@@ -73,6 +76,11 @@ public class Payload implements Combinable<Payload>
     public static void setDefinite(){definite = 0;}
     public void addDefinite()
     {
+	if(exponent == -1)
+	{
+	    definite += (coefficient * Math.log(definiteup)) - (coefficient * Math.log(definitedown));
+	    return;
+	}
 	double coff = (double)coefficient / ((double)exponent + 1);
 	definite += (coff * Math.pow(definiteup, exponent + 1)) - (coff * Math.pow(definitedown, exponent + 1));
     }

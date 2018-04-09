@@ -1,5 +1,6 @@
-SORT JEDI           Not Found
-SEARCH CHEWBACCA    Not Found
-JAR JAR BINKS       Found
-DENGAR              Found
-100.00              Found
+SORT AREA DEC       Head: 778.06,   Tail: 6.42
+SORT PILOT DEC      Head: R2_D2,    Tail: Baron Papanoida
+SORT PILOT ASC      Head: Baron Papanoida,Tail: R2_D2
+CAPTAIN PHASMA      Found
+COMMANDER CODY      Not Found
+SORT AREA ASC       Head: 6.42,     Tail: 778.06

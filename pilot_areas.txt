@@ -1,10 +1,6 @@
-Boshek          133.70 
-Dengar          83.20 
-Finn            237.13 
-Malakili        1731.95 
-Oleg            776.81 
+General Hux     6.42  
+Baron Papanoida 53.50 
+R2_D2           69.00 
+Captain Phasma  84.20 
 General Grievous 100.00 
 Palpatine       778.06 
-Baron Papanoida 53.50 
-Captain Phasma  84.20 
-Jar Jar Binks   6.42  

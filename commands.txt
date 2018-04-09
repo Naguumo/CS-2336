@@ -1,9 +1,6 @@
-sort jedi
-search Chewbacca
-Jar Jar Binks
-C.3PO
-237.89%
-Dengar
-12A.2
-Ke$ha
-100.00
+sort area dec
+sort pilot dec
+sort pilot asc
+Captain Phasma
+Commander Cody
+sort area asc
