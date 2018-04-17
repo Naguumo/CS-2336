@@ -1,3 +1,4 @@
+//Ishaan Bharal(ixb170930)
 package HW7;
 
 public class HashTable
