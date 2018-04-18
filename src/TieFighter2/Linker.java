@@ -1,6 +1,6 @@
 //Ishaan Bharal (ixb170930)
 
-package TieFighter;
+package TieFighter2;
 
 public class Linker<E>
 {
