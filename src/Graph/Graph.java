@@ -1,4 +1,4 @@
-package TieFighter;
+package Graph;
 
 public interface Graph<V> {
   /** Return the number of vertices in the graph */
